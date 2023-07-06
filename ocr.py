@@ -1,4 +1,6 @@
 import os
+import argparser
+from PIL import Image
 
 data_selector = 'mnist'
 DATA_DIR = os.getcwd() + '/data/'
@@ -101,5 +103,15 @@ def main():
 
 	print(f"Predictions: {labels}\n\nActual results: {test_labels}")
 
+
+
 if __name__ == '__main__':
+	parser = argparser.ArgumentParser()
+	parser.add('--image', type=str, help="Specify image path")
+	parser.add('--image', type=str, help="Specify image path")
+	parser.add('--type', type=str, help="Specify type i.e. digits chars alphanumerical")
+	args = parser.parse_arg()
+
+
+
 	main()
