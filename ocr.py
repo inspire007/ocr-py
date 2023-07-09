@@ -1,6 +1,7 @@
 import os
-import argparser
+import argparse
 from PIL import Image
+from imgconv import imgconverter
 
 data_selector = 'mnist'
 DATA_DIR = os.getcwd() + '/data/'
@@ -91,14 +92,26 @@ def find_trained_labels(sorted_distances, train_labels):
 def find_trained_label(X, train_labels):
 	return train_labels[X]
 
-def main():
-	train_data = twod_oned(read_file_bytes(TRAIN_DATA_CLASS_FILE, 1000))
-	train_labels = read_labels(TRAIN_DATA_LABELS_FILE, 1000)
+def main(args):
 
-	test_data = twod_oned(read_file_bytes(TEST_DATA_CLASS_FILE, 2))
-	test_labels = read_labels(TEST_DATA_LABELS_FILE, 2)
+	train_data = twod_oned(read_file_bytes(TRAIN_DATA_CLASS_FILE, 10000))
+	train_labels = read_labels(TRAIN_DATA_LABELS_FILE, 10000)
 
-	distances = [find_distances(test_X, train_data, 1) for test_X in test_data]
+	if args.image is not None:
+		img = imgconverter()
+		imgData = [img.read(args.image)]
+		test_data = twod_oned(imgData)
+		test_labels = []
+
+	else:
+		test_data_b = read_file_bytes(TEST_DATA_CLASS_FILE, 2)
+		test_data = twod_oned(test_data_b)
+		test_labels = read_labels(TEST_DATA_LABELS_FILE, 2)
+
+	#img = imgconverter()
+	#img.write(test_data_b[1])
+	
+	distances = [find_distances(test_X, train_data, 3) for test_X in test_data]
 	labels = find_trained_labels(distances, train_labels)
 
 	print(f"Predictions: {labels}\n\nActual results: {test_labels}")
@@ -106,12 +119,9 @@ def main():
 
 
 if __name__ == '__main__':
-	parser = argparser.ArgumentParser()
-	parser.add('--image', type=str, help="Specify image path")
-	parser.add('--image', type=str, help="Specify image path")
-	parser.add('--type', type=str, help="Specify type i.e. digits chars alphanumerical")
-	args = parser.parse_arg()
-
-
-
-	main()
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--image', type=str, help="Specify image path")
+	#parser.add_argument('--image', type=str, help="Specify image path")
+	parser.add_argument('--type', type=str, help="Specify type i.e. digits chars alphanumerical")
+	args = parser.parse_args()
+	main(args)
