@@ -120,7 +120,7 @@ def main(args):
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--image', type=str, help="Specify image path")
+	parser.add_argument('--image', type=str, help="Specifny image path")
 	#parser.add_argument('--image', type=str, help="Specify image path")
 	parser.add_argument('--type', type=str, help="Specify type i.e. digits chars alphanumerical")
 	args = parser.parse_args()
